@@ -17,6 +17,13 @@ public class TicketMasterAPI {
 	private static final String DEFAULT_KEYWORD = "";
 	private static final String API_KEY = "nDAkjiDHQYtoNS1ytB07n22ZuaAvQQwt";
 	
+	/**
+	 * 
+	 * @param lat The latitude of the location.
+	 * @param lon longitude The longitude of the location.
+	 * @param keyword Optional search keyword.
+	 * @return JSONArray format events.
+	 */
 	public JSONArray search(double lat, double lon, String keyword) {
 		if (keyword == null) {
 			keyword = DEFAULT_KEYWORD;
@@ -39,22 +46,21 @@ public class TicketMasterAPI {
 			System.out.println("\nSending 'GET' request to URL : " + URL + "?" + query);
 			System.out.println("Response Code : " + responseCode);
 			// Read response.
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(connection.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String input;
 			StringBuilder response = new StringBuilder();
 			while ((input = in.readLine()) != null) {
 				response.append(input);
 			}
 			in.close();
+			// Return the embedded events.
 			try {
-				JSONObject obj = new JSONObject(response.toString());
-				if (obj.isNull("_embedded")) {
+				JSONObject responseObj = new JSONObject(response.toString());
+				if (responseObj.isNull("_embedded")) {
 					return new JSONArray();
+				} else {
+					return responseObj.getJSONObject("_embedded").getJSONArray("events");
 				}
-				JSONObject embedded = obj.getJSONObject("_embedded");
-				JSONArray events = embedded.getJSONArray("events");
-				return events;			
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -90,5 +96,4 @@ public class TicketMasterAPI {
 		// Houston, TX
 		tmApi.printSearchResults(29.682684, -95.295410);
 	}
-
 }
