@@ -1,6 +1,5 @@
 package external;
 
-
 public class GeoHash {
 	private static final String BASE_32 = "0123456789bcdefghjkmnpqrstuvwxyz";
 
@@ -19,13 +18,6 @@ public class GeoHash {
     	return (range[0] + range[1]) / 2;
     }
     
-    /**
-     * 
-     * @param latitude The latitude of the location to be encoded.
-     * @param longitude The longitude of the location to be encoded.
-     * @param precision The desired precision of the geohash.
-     * @return The string representation of the geohash.
-     */
     public static String encodeGeohash(double latitude, double longitude, int precision) {
         double[] latRange = new double[]{-90.0, 90.0};
         double[] lonRange = new double[]{-180.0, 180.0};
