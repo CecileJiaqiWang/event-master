@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -29,19 +30,19 @@ public class Item {
 	}
 	/**
 	 * 
-	 * @author cecile
 	 * Item builder
 	 *
 	 */
 	public static class ItemBuilder {
-		private String itemId;
-		private String name;
-		private double rating;
-		private String address;
-		private Set<String> categories;
-		private String imgUrl;
-		private String url;
-		private double distance;
+		// Default values.
+		private String itemId = "";
+		private String name = "";
+		private double rating = 0;
+		private String address = "";
+		private Set<String> categories = new HashSet<>();
+		private String imgUrl = "";
+		private String url = "";
+		private double distance = 0;
 		
 		public ItemBuilder itemId(String itemId) {
 			this.itemId = itemId;
@@ -55,6 +56,11 @@ public class Item {
 		
 		public ItemBuilder rating(double rating) {
 			this.rating = rating;
+			return this;
+		}
+		
+		public ItemBuilder address(String address) {
+			this.address = address;
 			return this;
 		}
 		
