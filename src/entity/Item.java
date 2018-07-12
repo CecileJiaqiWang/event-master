@@ -1,0 +1,127 @@
+package entity;
+
+import java.util.Set;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+public class Item {
+	private String itemId;
+	private String name;
+	private double rating;
+	private String address;
+	private Set<String> categories;
+	private String imgUrl;
+	private String url;
+	private double distance;
+	
+	private Item(ItemBuilder builder) {
+		this.itemId = builder.itemId;
+		this.name = builder.name;
+		this.rating = builder.rating;
+		this.address = builder.address;
+		this.categories = builder.categories;
+		this.imgUrl = builder.imgUrl;
+		this.url = builder.url;
+		this.distance = builder.distance;
+	}
+	/**
+	 * 
+	 * @author cecile
+	 * Item builder
+	 *
+	 */
+	public static class ItemBuilder {
+		private String itemId;
+		private String name;
+		private double rating;
+		private String address;
+		private Set<String> categories;
+		private String imgUrl;
+		private String url;
+		private double distance;
+		
+		public ItemBuilder itemId(String itemId) {
+			this.itemId = itemId;
+			return this;
+		}
+		
+		public ItemBuilder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public ItemBuilder rating(double rating) {
+			this.rating = rating;
+			return this;
+		}
+		
+		public ItemBuilder categories(Set<String> categories) {
+			this.categories = categories;
+			return this;
+		}
+		
+		public ItemBuilder imgUrl(String imgUrl) {
+			this.imgUrl = imgUrl;
+			return this;
+		}
+		
+		public ItemBuilder url(String url) {
+			this.url = url;
+			return this;
+		}
+		
+		public ItemBuilder distance(Double distance) {
+			this.distance = distance;
+			return this;
+		}
+		
+		public Item build() {
+			return new Item(this);
+		}
+	}
+	
+	public String getItemId() {
+		return itemId;
+	}
+	public String getName() {
+		return name;
+	}
+	public double getRating() {
+		return rating;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public Set<String> getCategories() {
+		return categories;
+	}
+	public String getImgURL() {
+		return imgUrl;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public double getDistance() {
+		return distance;
+	}
+	
+	public JSONObject toJSONObject() {
+		JSONObject obj = new JSONObject();
+		try {
+			obj.put("item_id", itemId);
+			obj.put("name", name);
+			obj.put("rating", rating);
+			obj.put("address", address);
+			obj.put("categories", new JSONArray(categories));
+			obj.put("image_url", imgUrl);
+			obj.put("url", url);
+			obj.put("distance", distance);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return obj;
+	}
+}
