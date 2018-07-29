@@ -39,15 +39,55 @@ public class MySQLConnection implements DBConnection {
 		
 	}
 
+	/**
+	 * Save the events each user favors into history table.
+	 */
 	@Override
 	public void setFavoriteItems(String userId, List<String> itemIds) {
-		// TODO Auto-generated method stub
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return;
+		}
+		
+		try {
+			// Bind parameters.
+			String sql = "INSERT IGNORE INTO history (user_id, item_id) VALUES (?, ?)";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			// Set parameters.
+			stmt.setString(1, userId);
+			for (String itemId : itemIds) {
+				stmt.setString(2, itemId);
+				stmt.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
+	/**
+	 * Delete the events each user unfavors into history table.
+	 */
 	@Override
 	public void unsetFavoriteItems(String userId, List<String> itemIds) {
-		// TODO Auto-generated method stub
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return;
+		}
+		
+		try {
+			// Bind parameters.
+			String sql = "DELETE FROM history WHERE user_id = ? AND item_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			// Set parameters.
+			stmt.setString(1, userId);
+			for (String itemId : itemIds) {
+				stmt.setString(2, itemId);
+				stmt.execute();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -73,7 +113,7 @@ public class MySQLConnection implements DBConnection {
 	public List<Item> searchItems(double lat, double lon, String keyword) {
 		TicketMasterAPI  tmAPI = new TicketMasterAPI();
 		List<Item> items = tmAPI.search(lat, lon, keyword);
-		// We need to save the events into database after searching for them.
+		// We need to save the events information into items table after searching for them.
 		for (Item item : items) {
 			saveItem(item);
 		}
