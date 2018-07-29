@@ -50,6 +50,7 @@ public class itemHistory extends HttpServlet {
 		DBConnection conn = DBConnectionFactory.getConnection();
 		if (conn == null) {
 			System.err.println("DB connection failed!");
+			return;
 		}
 		try {
 			JSONObject input = RpcHelper.readJsonObject(request);
