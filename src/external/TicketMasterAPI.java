@@ -169,7 +169,7 @@ public class TicketMasterAPI {
 	 * @param lat The latitude of the location.
 	 * @param lon longitude The longitude of the location.
 	 * @param keyword Optional search keyword.
-	 * @return JSONArray format events.
+	 * @return A list of events.
 	 */
 	public List<Item> search(double lat, double lon, String keyword) {
 		if (keyword == null) {
