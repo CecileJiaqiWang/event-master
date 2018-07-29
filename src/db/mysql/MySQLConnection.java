@@ -1,5 +1,7 @@
 package db.mysql;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
 import java.util.Set;
 
@@ -7,10 +9,30 @@ import db.DBConnection;
 import entity.Item;
 
 public class MySQLConnection implements DBConnection {
+	private Connection conn;
+	
+	public MySQLConnection() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conn = DriverManager.getConnection(MySQLDBUtil.URL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
+	/**
+	 * Close database connection.
+	 */
 	public void close() {
-		// TODO Auto-generated method stub
+		if (conn != null) {
+			// Close connection if the connection was open.
+			try {
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
