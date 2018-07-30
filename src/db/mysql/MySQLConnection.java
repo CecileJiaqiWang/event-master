@@ -53,6 +53,8 @@ public class MySQLConnection implements DBConnection {
 		}
 		
 		try {
+			System.out.println("user_id:" + userId);
+			System.out.println("item_id:" + itemIds);
 			// Bind parameters.
 			String sql = "INSERT IGNORE INTO history (user_id, item_id) VALUES (?, ?)";
 			PreparedStatement stmt = conn.prepareStatement(sql);
