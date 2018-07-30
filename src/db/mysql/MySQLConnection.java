@@ -101,7 +101,8 @@ public class MySQLConnection implements DBConnection {
 	@Override
 	public Set<String> getFavoriteItemIds(String userId) {
 		if (conn == null) {
-			return new HashSet<>();
+			System.err.println("DB connection failed!");
+			return null;
 		}
 		
 		Set<String> favoriteItemIds = new HashSet<>();
@@ -127,7 +128,7 @@ public class MySQLConnection implements DBConnection {
 	public Set<Item> getFavoriteItems(String userId) {
 		if (conn == null) {
 			System.err.println("DB connection failed!");
-			return new HashSet<>();
+			return null;
 		}
 		
 		Set<Item> favoriteItems = new HashSet<>();
@@ -160,10 +161,30 @@ public class MySQLConnection implements DBConnection {
 		return favoriteItems;
 	}
 
+	/**
+	 * Helper function. Returns a set of categories of a certain event.
+	 */
 	@Override
 	public Set<String> getCategories(String itemId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return null;
+		}
+		
+		Set<String> categories = new HashSet<>();
+		
+		try {
+			String sql = "SELECT catagory FROM categories WHERE item_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, itemId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				categories.add(rs.getString("category"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return categories;
 	}
 
 	@Override
