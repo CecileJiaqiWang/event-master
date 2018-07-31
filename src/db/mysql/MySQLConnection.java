@@ -176,7 +176,7 @@ public class MySQLConnection implements DBConnection {
 		Set<String> categories = new HashSet<>();
 		
 		try {
-			String sql = "SELECT catagory FROM categories WHERE item_id = ?";
+			String sql = "SELECT category FROM categories WHERE item_id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, itemId);
 			ResultSet rs = stmt.executeQuery();

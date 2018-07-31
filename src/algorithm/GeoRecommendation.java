@@ -15,6 +15,11 @@ import db.DBConnectionFactory;
 import entity.Item;
 
 public class GeoRecommendation {
+	public static void main(String[] args) {
+		GeoRecommendation re = new GeoRecommendation();
+		System.out.println(re.recommendItems("1111", 37.38, -122.08 ));
+	}
+	
 	public List<Item> recommendItems (String userId, double lat, double lon) {
 		List<Item> recommendedItems = new ArrayList<>();
 		DBConnection conn = DBConnectionFactory.getConnection();

@@ -10,13 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
+<<<<<<< Updated upstream
 import org.json.JSONException;
+<<<<<<< Updated upstream
 
 import algorithm.GeoRecommendation;
 import entity.Item;
 
 import algorithm.GeoRecommendation;
 import entity.Item;
+=======
+import org.json.JSONObject;
+=======
+
+import algorithm.GeoRecommendation;
+import entity.Item;
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 /**
  * Servlet implementation class RecommendItem
