@@ -15,6 +15,9 @@ import org.json.JSONException;
 import algorithm.GeoRecommendation;
 import entity.Item;
 
+import algorithm.GeoRecommendation;
+import entity.Item;
+
 /**
  * Servlet implementation class RecommendItem
  */
@@ -34,6 +37,7 @@ public class RecommendItem extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<<<<<<< Updated upstream
 	    String userId = request.getParameter("user_id");
 	    double lat = Double.parseDouble(request.getParameter("lat"));
 	    double lon = Double.parseDouble(request.getParameter("lon"));
@@ -41,6 +45,16 @@ public class RecommendItem extends HttpServlet {
 	    GeoRecommendation recommendation = new GeoRecommendation();
 	    // Get Recommendation.
 	    List<Item> items = recommendation.recommendItems(userId, lat, lon);
+=======
+		String userId = request.getParameter("user_id");
+		Double lat = Double.parseDouble(request.getParameter("lat"));
+		Double lon = Double.parseDouble(request.getParameter("lon"));
+		
+		// Get recommendation.
+		GeoRecommendation recommendation = new GeoRecommendation();
+		List<Item> items = recommendation.recommendItems(userId, lat, lon);
+		
+>>>>>>> Stashed changes
 		JSONArray array = new JSONArray();
 		for (Item item : items) {
 			array.put(item.toJSONObject());
