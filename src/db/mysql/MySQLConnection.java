@@ -3,12 +3,15 @@ package db.mysql;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import db.DBConnection;
 import entity.Item;
+import entity.Item.ItemBuilder;
 import external.TicketMasterAPI;
 
 public class MySQLConnection implements DBConnection {
@@ -92,23 +95,98 @@ public class MySQLConnection implements DBConnection {
 		}
 		
 	}
+	
+	/**
+	 * Helper function. Returns a set of itemIds a user favored.
+	 */
 
 	@Override
 	public Set<String> getFavoriteItemIds(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return null;
+		}
+		
+		Set<String> favoriteItemIds = new HashSet<>();
+		
+		try {
+			String sql = "SELECT item_id FROM history WHERE user_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1,  userId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				favoriteItemIds.add(rs.getString("item_id"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return favoriteItemIds;
 	}
 
+	/**
+	 * Get a set of events the user favors.
+	 */
 	@Override
 	public Set<Item> getFavoriteItems(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return null;
+		}
+		
+		Set<Item> favoriteItems = new HashSet<>();
+		Set<String> itemIds = getFavoriteItemIds(userId);
+		try {
+			// Bind parameters.
+			String sql = "SELECT * FROM items WHERE item_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			for (String itemId : itemIds) {
+				stmt.setString(1, itemId);
+				ResultSet rs = stmt.executeQuery();
+				ItemBuilder builder = new ItemBuilder();
+				
+				while (rs.next()) {
+					// Build each item through item builder.
+					builder.itemId(rs.getString("item_id"))
+					.name(rs.getString("name"))
+					.address(rs.getString("address"))
+					.imgUrl(rs.getString("image_url"))
+					.url(rs.getString("url"))
+					.categories(getCategories(itemId))
+					.rating(rs.getDouble("rating"))
+					.distance(rs.getDouble("distance"));
+					favoriteItems.add(builder.build());
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return favoriteItems;
 	}
 
+	/**
+	 * Helper function. Returns a set of categories of a certain event.
+	 */
 	@Override
 	public Set<String> getCategories(String itemId) {
-		// TODO Auto-generated method stub
-		return null;
+		if (conn == null) {
+			System.err.println("DB connection failed!");
+			return null;
+		}
+		
+		Set<String> categories = new HashSet<>();
+		
+		try {
+			String sql = "SELECT catagory FROM categories WHERE item_id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, itemId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				categories.add(rs.getString("category"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return categories;
 	}
 
 	@Override
